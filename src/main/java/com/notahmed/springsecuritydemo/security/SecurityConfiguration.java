@@ -24,7 +24,10 @@ public class SecurityConfiguration{
     // bean telling spring security to use in memory authentication
     @Bean
     public InMemoryUserDetailsManager userDetailsService() {
-        UserDetails user = User.withDefaultPasswordEncoder()
+
+        //.withDefaultPasswordEncoder()
+
+        UserDetails user = User.builder()
                 .username("user")
                 .password("{noop}password")
                 .roles("USER")
@@ -56,10 +59,13 @@ public class SecurityConfiguration{
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 
+        // Most restrictive to less
 
         http
                 .authorizeHttpRequests(auth -> auth
-                                    .requestMatchers("/**").hasRole("ADMIN")
+                                    .requestMatchers("/admin").hasRole("ADMIN")
+                                    .requestMatchers("/user").hasAnyRole("ADMIN", "USER")
+                                    .requestMatchers("/").permitAll()
 
                 )
                 .formLogin(Customizer.withDefaults());
