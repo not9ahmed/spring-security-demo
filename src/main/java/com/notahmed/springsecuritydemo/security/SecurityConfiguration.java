@@ -61,6 +61,11 @@ public class SecurityConfiguration{
 
         // Most restrictive to less
 
+        //specifying the url path and user allowed access
+
+        // allowing any kind of access and this is important for static files
+//        .requestMatchers("/", "static/css", "static/js").permitAll()
+
         http
                 .authorizeHttpRequests(auth -> auth
                                     .requestMatchers("/admin").hasRole("ADMIN")
